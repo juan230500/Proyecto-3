@@ -294,7 +294,8 @@ Salidas: ninguna
 print(len(dic_trad))
 
 
-
+arduino=serial.Serial("COM3",38400)
+sleep(1.62) #tiempo de reacción experimental
 
 ordenar2() #se ajustan las puntuaciones desde el inico
 
@@ -490,21 +491,41 @@ def Ventana3():
     'p12.gif', 'p13.gif', 'p14.gif', 'p15.gif', 'p16.gif',
     'p17.gif', 'p18.gif', 'p19.gif', 'p20.gif']
     def img_der():
-        global i_per
+        pass
+        '''global i_per
         i_per+=1
         i_per=i_per%20
         Silueta=cargarImg(L_per[i_per])
         Sh_cv.configure(image=Silueta)
         Sh_cv.photo=Silueta
-        L_vd.configure(text=L_nom[i_per])
+        L_vd.configure(text=L_nom[i_per])'''
     def img_iz():
-        global i_per
+        pass
+        '''global i_per
         i_per-=1
         i_per=i_per%20
         Silueta=cargarImg(L_per[i_per])
         Sh_cv.configure(image=Silueta)
         Sh_cv.photo=Silueta
-        L_vd.configure(text=L_nom[i_per])
+        L_vd.configure(text=L_nom[i_per])'''
+
+    def ajustar():
+    	a=arduino.readline()
+    	b=a[18:20]
+    	try:
+    		c=int(b)
+    	except:
+    		c=int(b[0])-48
+
+    	global i_per
+    	if c>60:
+    		c=60
+    	i_per=c//3-1
+    	Silueta=cargarImg(L_per[i_per])
+    	Sh_cv.configure(image=Silueta)
+    	Sh_cv.photo=Silueta
+    	L_vd.configure(text=L_nom[i_per])
+    	return ajustar()
 
     Silueta=cargarImg(L_per[i_per])
     Sh_cv=Label(C_v31, image=Silueta, bg='white')
@@ -523,7 +544,6 @@ def Ventana3():
 
     L_vd=Label(C_v31,text=L_nom[i_per],bg="grey",fg="black",font=('Eras Bold ITC',20),justify=LEFT)
     L_vd.place(x=50,y=120)
-    
         
 
     def back():
@@ -535,6 +555,11 @@ def Ventana3():
     Btn_back1 = Button(C_v3, image=home ,command=back, fg = "#000000")
     Btn_back1.image = home
     Btn_back1.place(x=650,y=500)
+
+    t=Thread(target=ajustar,args=()) #hilo
+    t.start()
+
+    root.mainloop()
 
 
         
@@ -590,10 +615,6 @@ def VentanaJuego(nombre):
         	st=st.encode()
 
         	return st
-
-
-        arduino=serial.Serial("COM3",38400)
-        sleep(1.62) #tiempo de reacción experimental
 
         if dft:
             pygame.init()
