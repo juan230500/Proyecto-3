@@ -510,22 +510,25 @@ def Ventana3():
         L_vd.configure(text=L_nom[i_per])'''
 
     def ajustar():
-    	a=arduino.readline()
-    	b=a[18:20]
-    	try:
-    		c=int(b)
-    	except:
-    		c=int(b[0])-48
+        try:
+        	a=arduino.readline()
+        	b=a[18:20]
+        	try:
+        		c=int(b)
+        	except:
+        		c=int(b[0])-48
 
-    	global i_per
-    	if c>60:
-    		c=60
-    	i_per=c//3-1
-    	Silueta=cargarImg(L_per[i_per])
-    	Sh_cv.configure(image=Silueta)
-    	Sh_cv.photo=Silueta
-    	L_vd.configure(text=L_nom[i_per])
-    	return ajustar()
+        	global i_per
+        	if c>60:
+        		c=60
+        	i_per=c//3-1
+        	Silueta=cargarImg(L_per[i_per])
+        	Sh_cv.configure(image=Silueta)
+        	Sh_cv.photo=Silueta
+        	L_vd.configure(text=L_nom[i_per])
+        	return ajustar()
+        except:
+        	pass #salir del thread
 
     Silueta=cargarImg(L_per[i_per])
     Sh_cv=Label(C_v31, image=Silueta, bg='white')
@@ -1360,6 +1363,33 @@ y1=500
 def back ():
     root.destroy()
 
+def ajust_bot():
+	global Lista_bot,c_i
+
+	for i in range(len(Lista_bot)):
+		if i==c_i:
+			sel="green"
+		else:
+			sel="black"
+		Lista_bot[i].configure(bg=sel)
+
+def ver_c():
+	global c_i
+	a=arduino.readline()
+	b=a[18:20]
+	try:
+		c=int(b)
+	except:
+		c=int(b[0])-48
+	c=c//8
+	if c_i==c:
+		pass
+	else:
+		c_i=c
+		ajust_bot()
+	return ver_c()
+
+
 img_aux=cargarImg("top2.gif")
 Btn1=Button(root,command=Ventana1,text=dic_trad[2],fg="black",bg="black",image=img_aux)
 Btn1.place(x=x1+mul*2,y=y1)
@@ -1385,6 +1415,13 @@ img_aux5=cargarImg("us.gif")
 Btn4=Button(root,command=inter,text="Español",fg="black",bg="grey",font=('Eras Bold ITC',12),image=img_aux5)
 Btn4.place(x=650,y=10)
 
+global c_i
+c_i=0
+global Lista_bot
+Lista_bot=[Btn4,Btn7,Btn2,Btn1,Btn6,Btn3,Btn_song0,Btn_song2,Btn_song1]
 
+
+t=Thread(target=ver_c,args=()) #hilo
+t.start()
 
 root.mainloop()
