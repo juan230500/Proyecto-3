@@ -1,0 +1,5 @@
+Dasd,550
+Fsd,400
+Dsfsd,350
+Gfd,325
+Fdsf,300

@@ -1,0 +1,4 @@
+Zapu,20
+Ha,19
+Haya,17
+Rocu,17
