@@ -8,6 +8,7 @@ from random import *                # randint()
 import pygame
 from pygame.locals import *
 from time import *
+import serial
 
 #______________/Sección de funciones a usar a lo largo del programa
 def cargarImg(nombre): # carga una imagen de la carpeta adyacente al archivo img a una variable
@@ -566,11 +567,33 @@ def VentanaJuego(nombre):
         Energia_c=100       
         Count=0
         Puntaje=0
+        C_display=9
 
         #           _____________________________
         #__________/Generar y reescalar imagenes
         def gen_img(img,x,y): #Generar cualquier imagen
             root_jueg.blit(img,(x,y))
+
+
+        #           _____________________________
+        #__________/Generar el codigo a leer por el arduino
+        def gen_serial(energia,aros):
+        	st='leds='
+        	for i in range(6):
+        		if (100//6)*(5-i)<energia:
+        			st+="1"
+        		else:
+        			st+="0"
+
+        	st+=",display="+str(aros)+";"
+
+        	st=st.encode()
+
+        	return st
+
+
+        arduino=serial.Serial("COM3",38400)
+        sleep(1.62) #tiempo de reacción experimental
 
         if dft:
             pygame.init()
@@ -694,6 +717,10 @@ Salidas: si existe el choque en cualquier punto congruente
             #           _____________________________
             #__________/movimiento
             while i:
+                if C_display==0:
+                    sleep(2)
+                    break
+
                 root_jueg.fill(black)
                 root_jueg.blit(fondo,(0,0))
 
@@ -754,6 +781,8 @@ Salidas: si existe el choque en cualquier punto congruente
 
                 if x_a>500 and in1==1:
                     salir=ev_aro((posX_jug,posY_jug),(xi_a,yi_a))
+                    C_display-=1
+                    arduino.write(gen_serial(Energia_c,C_display))
                     if salir==1:
                         colision_sonido.play()
                         sleep(2)
@@ -771,6 +800,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 if Count==10:
                     Count-=10
                     Energia_c-=1
+                    arduino.write(gen_serial(Energia_c,C_display))
                     
                 
 
@@ -1027,6 +1057,9 @@ Salidas: si existe el choque en cualquier punto congruente
             #           _____________________________
             #__________/movimiento
             while i:
+                if C_display==0:
+                    sleep(2)
+                    break
                 root_jueg.fill(black)
                 root_jueg.blit(fondo,(0,0))
 
@@ -1083,14 +1116,20 @@ Salidas: si existe el choque en cualquier punto congruente
                     if posX_jug+121<=Enemigo1[1]+Enemigo1[6] and posX_jug+171>=Enemigo1[1] and posY_jug<=Enemigo1[2]+Enemigo1[7] and posY_jug-50>=Enemigo1[2]:
                         Puntaje+=25
                         Enemigo1=[Enem1_img, 0, 0, 0, False, 0, 0, 0, 0]
+                        C_display-=1
+                        arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo1)
                     elif posX_jug+121<=Enemigo2[1]+Enemigo2[6] and posX_jug+171>=Enemigo2[1] and posY_jug<=Enemigo2[2]+Enemigo2[7] and posY_jug-50>=Enemigo2[2]:
                         Puntaje+=25
                         Enemigo2=[Enem2_img, 0, 0, 0, False, 0, 0, 0, 0]
+                        C_display-=1
+                        arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo2)
                     elif posX_jug+121<=Enemigo3[1]+Enemigo3[6] and posX_jug+171>=Enemigo3[1] and posY_jug<=Enemigo3[2]+Enemigo3[7] and posY_jug-50>=Enemigo3[2]:
                         Puntaje+=25
                         Enemigo3=[Enem3_img, 0, 0, 0, False, 0, 0, 0, 0]
+                        C_display-=1
+                        arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo3)
 
                 if x_e>60: #Si el la energia mide más de 60x60 se resetean sus condiciones de inicio
@@ -1151,6 +1190,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 if Count==10:
                     Count-=10
                     Energia_c-=1
+                    arduino.write(gen_serial(Energia_c,C_display))
                     
 
                 exp(Energia,x_e,y_e,xi_e,yi_e)
@@ -1226,6 +1266,7 @@ Salidas: si existe el choque en cualquier punto congruente
 
         root.deiconify()
         pygame.quit()
+        arduino.close()
         Ventana_aux()
 
         file=open("Jug.txt","a")
