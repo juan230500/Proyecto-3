@@ -2,5 +2,9 @@ import serial
 import time
 
 arduino=serial.Serial("COM3",38400)
-print("leds=111000,display=9".encode())
-arduino.write(b"leds=111000,display=6;")
+time.sleep(1.62) #tiempo de reacción experimental
+for i in range(10):
+    arduino.write(b'leds=101010,display='+str(i).encode()+b';')
+    time.sleep(1)
+
+arduino.close()
