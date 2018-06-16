@@ -1389,7 +1389,7 @@ def ajust_bot(c_i):
 
 #               ____________________________
 #______________/Movimiento del potenciometro y botones
-def get_pot():
+def get_pot(): #sacar valor de potenciometro
         a=arduino.readline()
         b=a[18:20]
         try:
@@ -1397,20 +1397,27 @@ def get_pot():
         except:
             c=int(b[0])-48
         return c
-def get_bot():
+
+def get_bot(): #sacar botones (btn1,btn2)
         a=arduino.readline()
         b2=a[12]-48
         b1=a[5]-48
         return b1,b2
 
-def get_gir():
+def get_gir(): #sacar estados de giroscopio (posx,posy)
     a=arduino.readline()
     a=a.decode()
     try:
-        b=a.index("posx")
+        b=a.index("posx")+5
+        c=a[b:].index(",")
+        d=a[b+c+6:-3]
     except:
+        print("fallo")
         return get_gir()
-    return b,a[b:]
+    e=a[b:b+c]
+    e=float(e)
+    d=float(d)
+    return e,d
 
 arduino=serial.Serial("COM3",38400)
 
