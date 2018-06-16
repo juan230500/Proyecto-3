@@ -1369,7 +1369,7 @@ def ajust_bot(c_i):
    global Lista_bot
    for i in range(len(Lista_bot)):
        if i==c_i:
-           sel="green"
+           sel="blue"
        else:
            sel="black"
        Lista_bot[i].configure(bg=sel) 
@@ -1392,18 +1392,23 @@ def get_bot():
 
 arduino=serial.Serial("COM3",38400)
 
-def mov_potenciometro_botones(c_i):
-    global vent,Lista_bot,i_per,i_back
+def mov_potenciometro_botones(c_i,Lista_bot):
+    global vent,i_per,i_back
     
     sleep(.1)
 
     btn=get_bot()
-    print(btn,vent)
 
     if btn[1]==0:
         if vent!=0:
             print("salir")
             i_back=True
+
+    if btn[0]==0:
+        Lista_fun=[inter,back,Ventana2,Ventana1,Ventana3,Jugar,off,play2,play1]
+        Lista_fun[c_i]()
+
+
             
     if vent==0: #ventana principal
         c=get_pot()//8
@@ -1423,7 +1428,8 @@ def mov_potenciometro_botones(c_i):
             pass
     elif vent==2: #ventana play
         c=get_pot()
-    return mov_potenciometro_botones(c_i)
+
+    return mov_potenciometro_botones(c_i,Lista_bot)
 
 
         
@@ -1463,10 +1469,9 @@ Btn4=Button(root,command=inter,text="Español",fg="black",bg="grey",font=('Eras 
 Btn4.place(x=650,y=10)
 
 c_i=0
-global Lista_bot
 Lista_bot=[Btn4,Btn7,Btn2,Btn1,Btn6,Btn3,Btn_song0,Btn_song2,Btn_song1]
 
-Hilo_poten=Thread(target=mov_potenciometro_botones,args=(c_i,)) #hilo
+Hilo_poten=Thread(target=mov_potenciometro_botones,args=(c_i,Lista_bot,)) #hilo
 Hilo_poten.start()
 
 
