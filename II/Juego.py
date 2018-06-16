@@ -482,6 +482,7 @@ def Ventana3():
     C_v33.place(x=50,y=300)
     
     #______________/Subsección de personajes
+
     global li_per
     L_nom=[]
     for i in li_per:
@@ -490,6 +491,7 @@ def Ventana3():
     'p6.gif', 'p7.gif', 'p8.gif', 'p9.gif', 'p10.gif', 'p11.gif',
     'p12.gif', 'p13.gif', 'p14.gif', 'p15.gif', 'p16.gif',
     'p17.gif', 'p18.gif', 'p19.gif', 'p20.gif']
+
     def img_der():
         global i_per
         i_per+=1
@@ -509,6 +511,7 @@ def Ventana3():
 
     def ajustar():
         try:
+            sleep(.1)
             v3.title(dic_trad[11])
             global i_per
             Silueta=cargarImg(L_per[i_per])
@@ -517,6 +520,7 @@ def Ventana3():
             L_vd.configure(text=L_nom[i_per])
             return ajustar()
         except:
+            print("fin hilo")
             pass
 
     Silueta=cargarImg(L_per[i_per])
