@@ -36,6 +36,19 @@ def lenn(li): #len
         return 0
     return 1+lenn(li[1:])
 
+def indexx2(li,el,i):
+    print(li)
+    if li==[] or li=="":
+        return None
+    if li[:len(el)]==el:
+        return i
+    else:
+        return indexx2(li[1:],el,i+1)
+
+def indexx(li,el):
+    return indexx2(li,el,0)
+
+
 #______________/Sección de manejo de archivos\______________
 
 #_________________/Generar lista aleatoria de jugadores
@@ -1390,13 +1403,22 @@ def get_bot():
         b1=a[5]-48
         return b1,b2
 
+def get_gir():
+    a=arduino.readline()
+    a=a.decode()
+    try:
+        b=a.index("posx")
+    except:
+        return get_gir()
+    return b,a[b:]
+
 arduino=serial.Serial("COM3",38400)
 
 def mov_potenciometro_botones(c_i,Lista_bot):
     global vent,i_per,i_back
     
     sleep(.1)
-
+    print(get_gir())
     btn=get_bot()
 
     if btn[1]==0:
