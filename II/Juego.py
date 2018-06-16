@@ -183,8 +183,11 @@ def play2():
 
 
 #______________/Sección de variables predefinidas con uso en todo el programa
-global vent
+global vent #indicador de ventana
 vent=0
+
+global i_back #indicador de backear
+i_back=False
 
 global dft
 dft="1" #1: asteroides 0:aros
@@ -350,6 +353,8 @@ Btn_song0.place(x=300,y=550)
 
 #______________/Sección de ventana de puntuaciones
 def Ventana1():
+    global vent
+    vent=3 #ventana 2 o 1
 
     datos=imprimir("Jug.txt","",0)
     
@@ -409,6 +414,8 @@ Salidas: ninguna
     Btn_res.place(x=100,y=560)
     
     def back():
+        global vent
+        vent=0
         v1.destroy()
         root.deiconify()
 
@@ -417,8 +424,23 @@ Salidas: ninguna
     Btn_back1.image = home
     Btn_back1.place(x=650,y=500)
 
+    def rev_back():
+        global i_back
+        if i_back==True:
+            i_back=False
+            back()
+            return
+        sleep(.1)
+        return rev_back()
+
+    Hilo_back=Thread(target=rev_back,args=()) #hilo
+    Hilo_back.start()
+
 #______________/Sección de ventana de about
 def Ventana2():
+    global vent
+    vent=3 #ventana 2 o 1
+
     root.withdraw()
     v2=Toplevel(root)
     v2.title("About")
@@ -446,6 +468,8 @@ def Ventana2():
     F_v21.place(x=150,y=300)
     
     def back():
+        global vent
+        vent=0
         v2.destroy()
         root.deiconify()
 
@@ -453,6 +477,18 @@ def Ventana2():
     Btn_back1 = Button(C_v2, image=home ,command=back, fg = "#000000")
     Btn_back1.image = home
     Btn_back1.place(x=700,y=500)
+
+    def rev_back():
+        global i_back
+        if i_back==True:
+            i_back=False
+            back()
+            return
+        sleep(.1)
+        return rev_back()
+
+    Hilo_back=Thread(target=rev_back,args=()) #hilo
+    Hilo_back.start()
 
 #______________/Sección de ventana de configuración
 def Ventana3():
@@ -558,6 +594,18 @@ def Ventana3():
     Hilo_aux=Thread(target=ajustar,args=()) #hilo
     Hilo_aux.start()
 
+    def rev_back():
+        global i_back
+        if i_back==True:
+            i_back=False
+            back()
+            return
+        sleep(.1)
+        return rev_back()
+
+    Hilo_back=Thread(target=rev_back,args=()) #hilo
+    Hilo_back.start()
+
         
     
     
@@ -577,9 +625,6 @@ def VentanaJuego(nombre):
     L_vj=Label(vj,text=tex,bg="white",fg="#000000",font=('Eras Bold ITC',32),justify=CENTER)
     L_vj.place(x=200,y=20)
 
-
-    arduino=serial.Serial("COM3",38400)
-    sleep(1.62) #tiempo de reacción experimental
 
     def Juego(dft):
         #           _____________________________
@@ -1256,7 +1301,6 @@ Salidas: si existe el choque en cualquier punto congruente
 
         root.deiconify()
         pygame.quit()
-        arduino.close()
         Ventana_aux()
 
         file=open("Jug.txt","a")
@@ -1321,8 +1365,8 @@ def Jugar(): #función que carga la ventana del juego
 
 #               __________________
 #______________/Selector de iconos
-def ajust_bot():
-   global Lista_bot,c_i
+def ajust_bot(c_i):
+   global Lista_bot
    for i in range(len(Lista_bot)):
        if i==c_i:
            sel="green"
@@ -1331,12 +1375,8 @@ def ajust_bot():
        Lista_bot[i].configure(bg=sel) 
 
 #               ____________________________
-#______________/Movimiento del potenciometro
-arduino=serial.Serial("COM3",38400)
-def mov_potenciometro():
-    global vent,Lista_bot,c_i,i_per
-
-    def get_pot():
+#______________/Movimiento del potenciometro y botones
+def get_pot():
         a=arduino.readline()
         b=a[18:20]
         try:
@@ -1344,15 +1384,34 @@ def mov_potenciometro():
         except:
             c=int(b[0])-48
         return c
+def get_bot():
+        a=arduino.readline()
+        b2=a[12]-48
+        b1=a[5]-48
+        return b1,b2
 
+arduino=serial.Serial("COM3",38400)
+
+def mov_potenciometro_botones(c_i):
+    global vent,Lista_bot,i_per,i_back
+    
+    sleep(.1)
+
+    btn=get_bot()
+    print(btn,vent)
+
+    if btn[1]==0:
+        if vent!=0:
+            print("salir")
+            i_back=True
+            
     if vent==0: #ventana principal
         c=get_pot()//8
         if c_i==c:
             pass
         else:
             c_i=c
-            ajust_bot()
-        return mov_potenciometro()
+            ajust_bot(c_i)
     elif vent==1: #ventana configuracion
         try:
             c=get_pot()
@@ -1360,24 +1419,14 @@ def mov_potenciometro():
                 c=60
             global i_per
             i_per=c//3-1
-            return mov_potenciometro()
         except:
-            return mov_potenciometro()
+            pass
     elif vent==2: #ventana play
         c=get_pot()
-        return mov_potenciometro()
+    return mov_potenciometro_botones(c_i)
 
 
-#               ____________________________
-#______________/Acción botones
-#Boton1_evento=Linea[6:7]
-def volver(): #para el botón 2
-    while True:
-        Linea=arduino.readline()
-        Boton2_evento=Linea[13:14]
-        print(Boton2_evento[0])
-        if int(Boton2_evento[0])==44:
-            return back()
+        
 
 
 #______________/Sección de botones de la ventana principal
@@ -1413,15 +1462,13 @@ img_aux5=cargarImg("us.gif")
 Btn4=Button(root,command=inter,text="Español",fg="black",bg="grey",font=('Eras Bold ITC',12),image=img_aux5)
 Btn4.place(x=650,y=10)
 
-global c_i
 c_i=0
 global Lista_bot
 Lista_bot=[Btn4,Btn7,Btn2,Btn1,Btn6,Btn3,Btn_song0,Btn_song2,Btn_song1]
 
-Hilo_poten=Thread(target=mov_potenciometro,args=()) #hilo
+Hilo_poten=Thread(target=mov_potenciometro_botones,args=(c_i,)) #hilo
 Hilo_poten.start()
 
-Hilo_btn2=Thread(target=volver, args=())
-Hilo_btn2.start
+
 
 root.mainloop()
