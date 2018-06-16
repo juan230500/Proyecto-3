@@ -183,7 +183,8 @@ def play2():
 
 
 #______________/Sección de variables predefinidas con uso en todo el programa
-
+global vent
+vent=0
 
 global dft
 dft="1" #1: asteroides 0:aros
@@ -245,8 +246,6 @@ Last modified date: 3/6/18
 
 dic_trad=dic_trad_en #lista con todas las palabras que se leerá en todo el programa
 
-
-
 def inter(): #función para intercambiar los idiomas
     """
 ******************************************************************
@@ -294,8 +293,7 @@ Salidas: ninguna
 print(len(dic_trad))
 
 
-arduino=serial.Serial("COM3",38400)
-sleep(1.62) #tiempo de reacción experimental
+
 
 ordenar2() #se ajustan las puntuaciones desde el inico
 
@@ -456,8 +454,10 @@ def Ventana2():
     Btn_back1.image = home
     Btn_back1.place(x=700,y=500)
 
-#______________/Sección de ventana de puntuaciones
+#______________/Sección de ventana de configuración
 def Ventana3():
+    global vent
+    vent=1
     root.withdraw()
     v3=Toplevel(root)
     v3.title(dic_trad[11])
@@ -491,44 +491,33 @@ def Ventana3():
     'p12.gif', 'p13.gif', 'p14.gif', 'p15.gif', 'p16.gif',
     'p17.gif', 'p18.gif', 'p19.gif', 'p20.gif']
     def img_der():
-        pass
-        '''global i_per
+        global i_per
         i_per+=1
         i_per=i_per%20
         Silueta=cargarImg(L_per[i_per])
         Sh_cv.configure(image=Silueta)
         Sh_cv.photo=Silueta
-        L_vd.configure(text=L_nom[i_per])'''
+        L_vd.configure(text=L_nom[i_per])
     def img_iz():
-        pass
-        '''global i_per
+        global i_per
         i_per-=1
         i_per=i_per%20
         Silueta=cargarImg(L_per[i_per])
         Sh_cv.configure(image=Silueta)
         Sh_cv.photo=Silueta
-        L_vd.configure(text=L_nom[i_per])'''
+        L_vd.configure(text=L_nom[i_per])
 
     def ajustar():
         try:
-        	a=arduino.readline()
-        	b=a[18:20]
-        	try:
-        		c=int(b)
-        	except:
-        		c=int(b[0])-48
-
-        	global i_per
-        	if c>60:
-        		c=60
-        	i_per=c//3-1
-        	Silueta=cargarImg(L_per[i_per])
-        	Sh_cv.configure(image=Silueta)
-        	Sh_cv.photo=Silueta
-        	L_vd.configure(text=L_nom[i_per])
-        	return ajustar()
+            v3.title(dic_trad[11])
+            global i_per
+            Silueta=cargarImg(L_per[i_per])
+            Sh_cv.configure(image=Silueta)
+            Sh_cv.photo=Silueta
+            L_vd.configure(text=L_nom[i_per])
+            return ajustar()
         except:
-        	pass #salir del thread
+            pass
 
     Silueta=cargarImg(L_per[i_per])
     Sh_cv=Label(C_v31, image=Silueta, bg='white')
@@ -547,9 +536,12 @@ def Ventana3():
 
     L_vd=Label(C_v31,text=L_nom[i_per],bg="grey",fg="black",font=('Eras Bold ITC',20),justify=LEFT)
     L_vd.place(x=50,y=120)
+    
         
 
     def back():
+        global vent
+        vent=0
         v3.destroy()
         root.deiconify()
 
@@ -559,11 +551,8 @@ def Ventana3():
     Btn_back1.image = home
     Btn_back1.place(x=650,y=500)
 
-    t=Thread(target=ajustar,args=()) #hilo
-    t.start()
-
-    root.mainloop()
-
+    Hilo_aux=Thread(target=ajustar,args=()) #hilo
+    Hilo_aux.start()
 
         
     
@@ -584,6 +573,9 @@ def VentanaJuego(nombre):
     L_vj=Label(vj,text=tex,bg="white",fg="#000000",font=('Eras Bold ITC',32),justify=CENTER)
     L_vj.place(x=200,y=20)
 
+
+    arduino=serial.Serial("COM3",38400)
+    sleep(1.62) #tiempo de reacción experimental
 
     def Juego(dft):
         #           _____________________________
@@ -606,18 +598,20 @@ def VentanaJuego(nombre):
         #           _____________________________
         #__________/Generar el codigo a leer por el arduino
         def gen_serial(energia,aros):
-        	st='leds='
-        	for i in range(6):
-        		if (100//6)*(5-i)<energia:
-        			st+="1"
-        		else:
-        			st+="0"
+            st='leds='
+            for i in range(6):
+                if (100//6)*(5-i)<energia:
+                    st+="1"
+                else:
+                    st+="0"
 
-        	st+=",display="+str(aros)+";"
+            st+=",display="+str(aros)+";"
 
-        	st=st.encode()
+            st=st.encode()
 
-        	return st
+            return st
+
+
 
         if dft:
             pygame.init()
@@ -927,38 +921,6 @@ Salidas: si existe el choque en cualquier punto congruente
                             Selector[0]=pygame.image.load("img\\Enem_c.png")
                             Selector[1]=randint(250,350)
                             Selector[2]=randint(250,350)
-                            Selector[4]=True
-                            Selector[5]=0
-                            Selector[6]=20
-                            Selector[7]=10
-                        elif Selector[3]==1:
-                            Selector[0]=pygame.image.load("img\\Enem_c.png")
-                            Selector[1]=randint(50, 230)
-                            Selector[2]=randint(250,350)
-                            Selector[4]=True
-                            Selector[5]=0
-                            Selector[6]=20
-                            Selector[7]=10
-                        elif Selector[3]==2:
-                            Selector[0]=pygame.image.load("img\\Enem_c.png")
-                            Selector[1]=randint(370, 450)
-                            Selector[2]=randint(250,350)
-                            Selector[4]=True
-                            Selector[5]=0
-                            Selector[6]=20
-                            Selector[7]=10
-                        elif Selector[3]==3:
-                            Selector[0]=pygame.image.load("img\\Enem_c.png")
-                            Selector[1]=randint(100, 400)
-                            Selector[2]=randint(50,230)
-                            Selector[4]=True
-                            Selector[5]=0
-                            Selector[6]=20
-                            Selector[7]=10
-                        elif Selector[3]==4:
-                            Selector[0]=pygame.image.load("img\\Enem_c.png")
-                            Selector[1]=randint(100, 400)
-                            Selector[2]=randint(300,400)
                             Selector[4]=True
                             Selector[5]=0
                             Selector[6]=20
@@ -1353,6 +1315,65 @@ def Jugar(): #función que carga la ventana del juego
     else:
         VentanaJuego(nombre) #devuelve la ventana junto con el nombre introducido
 
+#               __________________
+#______________/Selector de iconos
+def ajust_bot():
+   global Lista_bot,c_i
+   for i in range(len(Lista_bot)):
+       if i==c_i:
+           sel="green"
+       else:
+           sel="black"
+       Lista_bot[i].configure(bg=sel) 
+
+#               ____________________________
+#______________/Movimiento del potenciometro
+arduino=serial.Serial("COM3",38400)
+def mov_potenciometro():
+    global vent,Lista_bot,c_i,i_per
+
+    def get_pot():
+        a=arduino.readline()
+        b=a[18:20]
+        try:
+            c=int(b)
+        except:
+            c=int(b[0])-48
+        return c
+
+    if vent==0: #ventana principal
+        c=get_pot()//8
+        if c_i==c:
+            pass
+        else:
+            c_i=c
+            ajust_bot()
+        return mov_potenciometro()
+    elif vent==1: #ventana configuracion
+        try:
+            c=get_pot()
+            if c>60:
+                c=60
+            global i_per
+            i_per=c//3-1
+            return mov_potenciometro()
+        except:
+            return mov_potenciometro()
+    elif vent==2: #ventana play
+        c=get_pot()
+        return mov_potenciometro()
+
+
+#               ____________________________
+#______________/Acción botones
+#Boton1_evento=Linea[6:7]
+def volver(): #para el botón 2
+    while True:
+        Linea=arduino.readline()
+        Boton2_evento=Linea[13:14]
+        print(Boton2_evento[0])
+        if int(Boton2_evento[0])==44:
+            return back()
 
 
 #______________/Sección de botones de la ventana principal
@@ -1362,33 +1383,6 @@ y1=500
 
 def back ():
     root.destroy()
-
-def ajust_bot():
-	global Lista_bot,c_i
-
-	for i in range(len(Lista_bot)):
-		if i==c_i:
-			sel="green"
-		else:
-			sel="black"
-		Lista_bot[i].configure(bg=sel)
-
-def ver_c():
-	global c_i
-	a=arduino.readline()
-	b=a[18:20]
-	try:
-		c=int(b)
-	except:
-		c=int(b[0])-48
-	c=c//8
-	if c_i==c:
-		pass
-	else:
-		c_i=c
-		ajust_bot()
-	return ver_c()
-
 
 img_aux=cargarImg("top2.gif")
 Btn1=Button(root,command=Ventana1,text=dic_trad[2],fg="black",bg="black",image=img_aux)
@@ -1420,8 +1414,10 @@ c_i=0
 global Lista_bot
 Lista_bot=[Btn4,Btn7,Btn2,Btn1,Btn6,Btn3,Btn_song0,Btn_song2,Btn_song1]
 
+Hilo_poten=Thread(target=mov_potenciometro,args=()) #hilo
+Hilo_poten.start()
 
-t=Thread(target=ver_c,args=()) #hilo
-t.start()
+Hilo_btn2=Thread(target=volver, args=())
+Hilo_btn2.start
 
 root.mainloop()
