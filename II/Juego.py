@@ -181,7 +181,10 @@ def play1():
     imagenc.config(image=imagen)'''
     p1=Thread(target=Song1,args=())
     p1.start()
-    root.mainloop()
+    try:
+        root.mainloop()
+    except:
+        pass
 
 def play2():
     off()
@@ -191,7 +194,10 @@ def play2():
     imagenc.config(image=imagen2)'''
     p2=Thread(target=Song2,args=())
     p2.start()
-    root.mainloop()
+    try:
+        root.mainloop()
+    except:
+        pass
 
 
 
@@ -650,6 +656,7 @@ def VentanaJuego(nombre):
         Count=0
         Puntaje=0
         C_display=9
+        pos=(0,0)
 
         #           _____________________________
         #__________/Generar y reescalar imagenes
@@ -812,19 +819,20 @@ Salidas: si existe el choque en cualquier punto congruente
 
                 teclas = pygame.key.get_pressed()
 
-                if teclas[pygame.K_LEFT] or teclas[97]:
+
+                if teclas[pygame.K_LEFT] or teclas[97] or pos[0]<-25:
                     if posX_jug>=10:
                         posX_jug-=10
                         Jug=pygame.transform.scale(Jug_a, (300, 150))
-                elif teclas[pygame.K_RIGHT] or teclas[100]:
+                elif teclas[pygame.K_RIGHT] or teclas[100] or pos[0]>25:
                     if posX_jug<=499:
                         posX_jug+=10
                         Jug=pygame.transform.scale(Jug_d, (300, 150))
-                elif teclas[pygame.K_UP] or teclas[119]:
+                elif teclas[pygame.K_UP] or teclas[119] or pos[1]<-25:
                     if posY_jug>=10:
                         posY_jug-=10
                         Jug=pygame.transform.scale(Jug_w, (300, 150))
-                elif teclas[pygame.K_DOWN] or teclas[115]:
+                elif teclas[pygame.K_DOWN] or teclas[115] or pos[1]>25:
                     if posY_jug<=445:
                         posY_jug+=10
                         Jug=pygame.transform.scale(Jug_s, (300, 150))
@@ -862,7 +870,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 if x_a>500 and in1==1:
                     salir=ev_aro((posX_jug,posY_jug),(xi_a,yi_a))
                     C_display-=1
-                    arduino.write(gen_serial(Energia_c,C_display))
+                    #arduino.write(gen_serial(Energia_c,C_display))
                     if salir==1:
                         colision_sonido.play()
                         sleep(2)
@@ -880,7 +888,12 @@ Salidas: si existe el choque en cualquier punto congruente
                 if Count==10:
                     Count-=10
                     Energia_c-=1
-                    arduino.write(gen_serial(Energia_c,C_display))
+                    #arduino.write(gen_serial(Energia_c,C_display))
+
+                if Count==2:
+                    Count-=2
+                    pos=get_gir()
+                    print(pos)
                     
                 
 
@@ -1165,19 +1178,19 @@ Salidas: si existe el choque en cualquier punto congruente
                         Puntaje+=25
                         Enemigo1=[Enem1_img, 0, 0, 0, False, 0, 0, 0, 0]
                         C_display-=1
-                        arduino.write(gen_serial(Energia_c,C_display))
+                        #arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo1)
                     elif posX_jug+121<=Enemigo2[1]+Enemigo2[6] and posX_jug+171>=Enemigo2[1] and posY_jug<=Enemigo2[2]+Enemigo2[7] and posY_jug-50>=Enemigo2[2]:
                         Puntaje+=25
                         Enemigo2=[Enem2_img, 0, 0, 0, False, 0, 0, 0, 0]
                         C_display-=1
-                        arduino.write(gen_serial(Energia_c,C_display))
+                        #arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo2)
                     elif posX_jug+121<=Enemigo3[1]+Enemigo3[6] and posX_jug+171>=Enemigo3[1] and posY_jug<=Enemigo3[2]+Enemigo3[7] and posY_jug-50>=Enemigo3[2]:
                         Puntaje+=25
                         Enemigo3=[Enem3_img, 0, 0, 0, False, 0, 0, 0, 0]
                         C_display-=1
-                        arduino.write(gen_serial(Energia_c,C_display))
+                        #arduino.write(gen_serial(Energia_c,C_display))
                         gen_enem(Enemigo3)
 
                 if x_e>60: #Si el la energia mide más de 60x60 se resetean sus condiciones de inicio
@@ -1238,7 +1251,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 if Count==10:
                     Count-=10
                     Energia_c-=1
-                    arduino.write(gen_serial(Energia_c,C_display))
+                    #arduino.write(gen_serial(Energia_c,C_display))
                     
 
                 exp(Energia,x_e,y_e,xi_e,yi_e)
@@ -1412,22 +1425,18 @@ def get_gir(): #sacar estados de giroscopio (posx,posy)
         c=a[b:].index(",")
         d=a[b+c+6:-3]
     except:
-        print("fallo")
         return get_gir()
     e=a[b:b+c]
     e=float(e)
     d=float(d)
     return e,d
 
-arduino=serial.Serial("COM3",38400)
+arduino=serial.Serial("COM3",38400) #cargar el puerte de arduino
 
 def mov_potenciometro_botones(c_i,Lista_bot):
-    global vent,i_per,i_back
-    
+    global vent,i_per,i_back,pos
     sleep(.1)
-    print(get_gir())
     btn=get_bot()
-
     if btn[1]==0:
         if vent!=0:
             print("salir")
@@ -1436,8 +1445,6 @@ def mov_potenciometro_botones(c_i,Lista_bot):
     if btn[0]==0:
         Lista_fun=[inter,back,Ventana2,Ventana1,Ventana3,Jugar,off,play2,play1]
         Lista_fun[c_i]()
-
-
             
     if vent==0: #ventana principal
         c=get_pot()//8
@@ -1457,7 +1464,6 @@ def mov_potenciometro_botones(c_i,Lista_bot):
             pass
     elif vent==2: #ventana play
         c=get_pot()
-
     return mov_potenciometro_botones(c_i,Lista_bot)
 
 
