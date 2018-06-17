@@ -7,39 +7,39 @@ byte num2Byte(char num){
   switch (num){
    case '0':
             //abcdefg.
-      numBin=B00000011;
+      numBin=B11111101;
       break;
    case '1':
             //abcdefg.
-      numBin=B10011111;
+      numBin=B01100001;
       break;
    case '2':
            //abcdefg.
-      numBin=B00100101;
+      numBin=B11011011;
       break;
    case '3':
-      numBin=B00001101;
+      numBin=B11110011;
       break;
    case '4':
-      numBin=B10011001;
+      numBin=B01100111;
       break;
    case '5':
-      numBin=B01001001;
+      numBin=B10110111;
       break;
    case '6':
-      numBin=B01000001;
+      numBin=B10111111;
       break;
    case '7':  
             //abcdefg.
-      numBin=B00011111;
+      numBin=B11100001;
       break;
    case '8':
             //abcdefg.
-      numBin=B00000001;
+      numBin=B11111111;
       break;
    case '9':
             //abcdefg.
-      numBin=B00011001;
+      numBin=B11100111;
       break;
   }
   return numBin;

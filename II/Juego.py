@@ -1275,7 +1275,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 if Count==10:
                     Count-=10
                     Energia_c-=1
-                    #arduino.write(gen_serial(Energia_c,C_display))
+                    arduino.write(gen_serial(Energia_c,C_display))
 
                     
 
