@@ -800,10 +800,10 @@ Salidas: si existe el choque en cualquier punto congruente
             t_inicio=time() #variable que define el momento de inicio del juego
             t_reg=1 #tiempo necesario para colocar otra energia
 
-
+            sleep(5)
             while get_gir()==(0,0):
                 pass
-            sleep(3)
+            
             #           _____________________________
             #__________/movimiento
             while i:
@@ -895,7 +895,6 @@ Salidas: si existe el choque en cualquier punto congruente
 
                 if Count%2==0:
                     pos=get_gir()
-                    print(pos)
                     
                 
 
@@ -1117,10 +1116,12 @@ Salidas: si existe el choque en cualquier punto congruente
             ly=2
             x_1=10000
             y_1=10000
+            btn_jg=1
 
+            sleep(5)
             while get_gir()==(0,0):
                 pass
-            sleep(3)
+            
             #           _____________________________
             #__________/movimiento
             while i:
@@ -1177,7 +1178,7 @@ Salidas: si existe el choque en cualquier punto congruente
                     if posY_jug<=445:
                         posY_jug+=10
                         Jug=pygame.transform.scale(Jug_s, (300, 150))
-                elif teclas[pygame.K_SPACE] or teclas[32] :
+                elif teclas[pygame.K_SPACE] or teclas[32]:
                     gen_img(Disp, posX_jug+121,posY_jug-50)
                     laser_sonido.play()
                     if posX_jug+121<=Enemigo1[1]+Enemigo1[6] and posX_jug+171>=Enemigo1[1] and posY_jug<=Enemigo1[2]+Enemigo1[7] and posY_jug-50>=Enemigo1[2]:
@@ -1369,6 +1370,9 @@ Salidas: si existe el choque en cualquier punto congruente
         global vent
         vent=0
 
+        Hilo_poten=Thread(target=mov_potenciometro_botones,args=(c_i,Lista_bot,)) #hilo
+        Hilo_poten.start()
+
 
 
     def aro():
@@ -1396,9 +1400,13 @@ Salidas: si existe el choque en cualquier punto congruente
             sleep(.2)
             global dft
             if dft==3:
+                dft=5
                 aro()
+
             elif dft==4:
+                dft=5
                 enemigos()
+                
             if dft:
                 Btn_back1.config(bg = "black")
                 Btn_back2.config(bg = "blue")
@@ -1471,7 +1479,9 @@ def get_gir(): #sacar estados de giroscopio (posx,posy)
 arduino=serial.Serial("COM3",38400) #cargar el puerte de arduino
 
 def mov_potenciometro_botones(c_i,Lista_bot):
-    global vent,i_per,i_back
+    global vent,i_per,i_back,dft
+    if dft==5:
+        return
     sleep(.1)
     btn=get_bot()
     if btn[1]==0:
@@ -1495,18 +1505,15 @@ def mov_potenciometro_botones(c_i,Lista_bot):
             c=get_pot()
             if c>60:
                 c=60
-            global i_per
             i_per=c//3-1
         except:
             pass
     elif vent==2: #ventana play
-        global dft
         c=get_pot()
         if c%10>5:
             dft=1
-        else :
+        else:
             dft=0
-
         if btn[0]==0:
             dft+=3
     return mov_potenciometro_botones(c_i,Lista_bot)
