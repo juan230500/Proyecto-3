@@ -37,7 +37,6 @@ def lenn(li): #len
     return 1+lenn(li[1:])
 
 def indexx2(li,el,i):
-    print(li)
     if li==[] or li=="":
         return None
     if li[:len(el)]==el:
@@ -213,6 +212,7 @@ dft="1" #1: asteroides 0:aros
 
 global i_per #índice de los personajes
 i_per=0
+
 
 global li_per #lista de personajes
 li_per=[('Ba', 0), ('Gibo', 0), ('Cukigi', 0), ('Hu', 0), ('Heva', 0), 
@@ -575,7 +575,6 @@ def Ventana3():
             L_vd.configure(text=L_nom[i_per])
             return ajustar()
         except:
-            print("fin hilo")
             pass
 
     Silueta=cargarImg(L_per[i_per])
@@ -630,6 +629,8 @@ def Ventana3():
     
 #______________/Sección de ventana de de juego
 def VentanaJuego(nombre):
+    global vent
+    vent=2
     vj=Toplevel()
     vj.geometry("800x600+100+50")
     vj.minsize(800,600)
@@ -800,7 +801,9 @@ Salidas: si existe el choque en cualquier punto congruente
             t_reg=1 #tiempo necesario para colocar otra energia
 
 
-
+            while get_gir()==(0,0):
+                pass
+            sleep(3)
             #           _____________________________
             #__________/movimiento
             while i:
@@ -820,19 +823,19 @@ Salidas: si existe el choque en cualquier punto congruente
                 teclas = pygame.key.get_pressed()
 
 
-                if teclas[pygame.K_LEFT] or teclas[97] or pos[0]<-25:
+                if teclas[pygame.K_LEFT] or teclas[97] or pos[0]<-20:
                     if posX_jug>=10:
                         posX_jug-=10
                         Jug=pygame.transform.scale(Jug_a, (300, 150))
-                elif teclas[pygame.K_RIGHT] or teclas[100] or pos[0]>25:
+                elif teclas[pygame.K_RIGHT] or teclas[100] or pos[0]>20:
                     if posX_jug<=499:
                         posX_jug+=10
                         Jug=pygame.transform.scale(Jug_d, (300, 150))
-                elif teclas[pygame.K_UP] or teclas[119] or pos[1]<-25:
+                elif teclas[pygame.K_UP] or teclas[119] or pos[1]<-20:
                     if posY_jug>=10:
                         posY_jug-=10
                         Jug=pygame.transform.scale(Jug_w, (300, 150))
-                elif teclas[pygame.K_DOWN] or teclas[115] or pos[1]>25:
+                elif teclas[pygame.K_DOWN] or teclas[115] or pos[1]>20:
                     if posY_jug<=445:
                         posY_jug+=10
                         Jug=pygame.transform.scale(Jug_s, (300, 150))
@@ -890,8 +893,7 @@ Salidas: si existe el choque en cualquier punto congruente
                     Energia_c-=1
                     #arduino.write(gen_serial(Energia_c,C_display))
 
-                if Count==2:
-                    Count-=2
+                if Count%2==0:
                     pos=get_gir()
                     print(pos)
                     
@@ -1115,6 +1117,10 @@ Salidas: si existe el choque en cualquier punto congruente
             ly=2
             x_1=10000
             y_1=10000
+
+            while get_gir()==(0,0):
+                pass
+            sleep(3)
             #           _____________________________
             #__________/movimiento
             while i:
@@ -1154,24 +1160,24 @@ Salidas: si existe el choque en cualquier punto congruente
 
                 teclas = pygame.key.get_pressed()
 
-                if teclas[pygame.K_LEFT] or teclas[97]:
+                if teclas[pygame.K_LEFT] or teclas[97]  or pos[0]<-20:
                     if posX_jug>=10:
                         posX_jug-=10
                         Jug=pygame.transform.scale(Jug_a, (300, 150))
                         gen_enem(Enemigo2)
-                elif teclas[pygame.K_RIGHT] or teclas[100]:
+                elif teclas[pygame.K_RIGHT] or teclas[100] or pos[0]>20:
                     if posX_jug<=499:
                         posX_jug+=10
                         Jug=pygame.transform.scale(Jug_d, (300, 150))
-                elif teclas[pygame.K_UP] or teclas[119]:
+                elif teclas[pygame.K_UP] or teclas[119] or pos[1]<-20:
                     if posY_jug>=60:
                         posY_jug-=10
                         Jug=pygame.transform.scale(Jug_w, (300, 150))
-                elif teclas[pygame.K_DOWN] or teclas[115]:
+                elif teclas[pygame.K_DOWN] or teclas[115] or pos[1]>20:
                     if posY_jug<=445:
                         posY_jug+=10
                         Jug=pygame.transform.scale(Jug_s, (300, 150))
-                elif teclas[pygame.K_SPACE] or teclas[32]:
+                elif teclas[pygame.K_SPACE] or teclas[32] :
                     gen_img(Disp, posX_jug+121,posY_jug-50)
                     laser_sonido.play()
                     if posX_jug+121<=Enemigo1[1]+Enemigo1[6] and posX_jug+171>=Enemigo1[1] and posY_jug<=Enemigo1[2]+Enemigo1[7] and posY_jug-50>=Enemigo1[2]:
@@ -1252,6 +1258,10 @@ Salidas: si existe el choque en cualquier punto congruente
                     Count-=10
                     Energia_c-=1
                     #arduino.write(gen_serial(Energia_c,C_display))
+
+                if Count%2==0:
+                    pos=get_gir()
+                    print(pos)
                     
 
                 exp(Energia,x_e,y_e,xi_e,yi_e)
@@ -1356,6 +1366,10 @@ Salidas: si existe el choque en cualquier punto congruente
         L_va=Label(va,text=tex,bg="white",fg="#000000",font=('Eras Bold ITC',12),justify=CENTER)
         L_va.place(x=0,y=0)
 
+        global vent
+        vent=0
+
+
 
     def aro():
         root.withdraw()
@@ -1376,6 +1390,28 @@ Salidas: si existe el choque en cualquier punto congruente
     Btn_back2 = Button(C_vj, image=home1 ,command=enemigos, fg = "#000000")
     Btn_back2.image = home1
     Btn_back2.place(x=200,y=360)
+
+    def ajustar():
+        try:
+            sleep(.2)
+            global dft
+            if dft==3:
+                aro()
+            elif dft==4:
+                enemigos()
+            if dft:
+                Btn_back1.config(bg = "black")
+                Btn_back2.config(bg = "blue")
+            else:
+                Btn_back1.config(bg = "blue")
+                Btn_back2.config(bg = "black")
+            return ajustar()
+        except:
+            pass
+
+    Hilo_dft=Thread(target=ajustar,args=()) #hilo
+    Hilo_dft.start()
+
     
 #______________/Sección de preventana del juego
 def Jugar(): #función que carga la ventana del juego
@@ -1424,17 +1460,18 @@ def get_gir(): #sacar estados de giroscopio (posx,posy)
         b=a.index("posx")+5
         c=a[b:].index(",")
         d=a[b+c+6:-3]
+        e=a[b:b+c]
+        e=float(e)
+        d=float(d)
     except:
-        return get_gir()
-    e=a[b:b+c]
-    e=float(e)
-    d=float(d)
+        return 0,0
+    
     return e,d
 
 arduino=serial.Serial("COM3",38400) #cargar el puerte de arduino
 
 def mov_potenciometro_botones(c_i,Lista_bot):
-    global vent,i_per,i_back,pos
+    global vent,i_per,i_back
     sleep(.1)
     btn=get_bot()
     if btn[1]==0:
@@ -1442,11 +1479,11 @@ def mov_potenciometro_botones(c_i,Lista_bot):
             print("salir")
             i_back=True
 
-    if btn[0]==0:
-        Lista_fun=[inter,back,Ventana2,Ventana1,Ventana3,Jugar,off,play2,play1]
-        Lista_fun[c_i]()
             
     if vent==0: #ventana principal
+        if btn[0]==0:
+            Lista_fun=[inter,back,Ventana2,Ventana1,Ventana3,Jugar,off,play2,play1]
+            Lista_fun[c_i]()
         c=get_pot()//8
         if c_i==c:
             pass
@@ -1463,7 +1500,15 @@ def mov_potenciometro_botones(c_i,Lista_bot):
         except:
             pass
     elif vent==2: #ventana play
+        global dft
         c=get_pot()
+        if c%10>5:
+            dft=1
+        else :
+            dft=0
+
+        if btn[0]==0:
+            dft+=3
     return mov_potenciometro_botones(c_i,Lista_bot)
 
 
