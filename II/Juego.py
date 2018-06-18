@@ -158,7 +158,10 @@ def ordenar2(): #ordena una lista entera leida de un archiv detexto y lo sobrees
         return
     a=ordenar(a)
     b=""
-    for i in range(1,6):
+    c=len(a)
+    if c>5:
+        c=5
+    for i in range(1,c+1):
         b+=(a[-i][0]+","+str(a[-i][1])+"\n")
     file=open("Jug.txt","w")
     file.write(b)
@@ -676,7 +679,6 @@ def VentanaJuego(nombre):
                     st+="1"
                 else:
                     st+="0"
-
             st+=",display="+str(aros)+";"
 
             st=st.encode()
@@ -813,23 +815,26 @@ Salidas: si existe el choque en cualquier punto congruente
 
                 #           _____________________________
                 #__________/Leer arduino
-                a1=arduino.readline()
-                a1=a1.decode()
-                b1=a1.split(",")
-                c1=float(b1[3][5:])
-                c2=float(b1[4][5:-3])
-                pos=(c1,c2)
+                if Count%2==1: #ejecutar 1 de cada 2 while
+                    a1=arduino.readline()
+                    a1=a1.decode()
+                    b1=a1.split(",")
+                    c1=float(b1[3][5:])
+                    c2=float(b1[4][5:-3])
+                    pos=(c1,c2)
 
-                root_jueg.fill(black)
-                root_jueg.blit(fondo,(0,0))
+                if Count%2==1:
+                    root_jueg.blit(fondo,(0,0))
 
                 Count+=1
+                #print(-t_exp+time())
 
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         i=0
 
                 teclas = pygame.key.get_pressed()
+
 
 
 
@@ -884,7 +889,7 @@ Salidas: si existe el choque en cualquier punto congruente
                     salir=ev_aro((posX_jug,posY_jug),(xi_a,yi_a))
                     C_display-=1
                     arduino.write(gen_serial(Energia_c,C_display))
-                    if salir==1:
+                    if salir==1 or Energia_c<=0:
                         colision_sonido.play()
                         sleep(2)
                         break
@@ -898,8 +903,8 @@ Salidas: si existe el choque en cualquier punto congruente
                         Energia_c=Energia_c+10 if Energia_c+10<=100 else 100
                         energia_sonido.play()
                         
-                if Count==10:
-                    Count-=10
+                if Count==6:
+                    Count-=6
                     Energia_c-=1
                     arduino.write(gen_serial(Energia_c,C_display))
 
@@ -928,6 +933,7 @@ Salidas: si existe el choque en cualquier punto congruente
                 pygame.display.update()
 
                 cick.tick(60)
+
         else:
             pygame.init()
 
@@ -947,6 +953,7 @@ Salidas: si existe el choque en cualquier punto congruente
             xi_e,yi_e=300,300 #posicion inicial de la energia
             x_e=20
             y_e=20
+            pos=(0,0,0) #giroscopios
 
             
             #           _____________________________
@@ -1130,9 +1137,18 @@ Salidas: si existe el choque en cualquier punto congruente
             #           _____________________________
             #__________/movimiento
             while i:
+                t_exp=time()
+
+                if Energia_c<=0:
+                    gen_img(Explosion,posX_jug-150,posY_jug-75)
+                    pygame.display.update()
+                    sleep(2)
+                    i=0
                 if C_display==0:
                     sleep(2)
                     break
+
+
 
                 #           _____________________________
                 #__________/Leer arduino
@@ -1142,11 +1158,12 @@ Salidas: si existe el choque en cualquier punto congruente
                 c1=float(b1[3][5:])
                 c2=float(b1[4][5:-3])
                 c3=b1[1][5]
-                print(c3)
                 pos=(c1,c2,c3)
-
-                root_jueg.fill(black)
+                
                 root_jueg.blit(fondo,(0,0))
+                
+
+                
 
                 Count+=1
                 
@@ -1165,7 +1182,7 @@ Salidas: si existe el choque en cualquier punto congruente
 
 
                 if 25>lx>20:
-                    if ev_choque_punt((x_1,y_1),(lx,ly),(posX_jug,posY_jug),(300,150)):
+                    if ev_choque_comp((x_1,y_1),(lx,ly),(posX_jug,posY_jug),(300,150)):
                         gen_img(Explosion,posX_jug-150,posY_jug-75)
                         pygame.display.update()
                         sleep(2)
@@ -1228,6 +1245,7 @@ Salidas: si existe el choque en cualquier punto congruente
                         xi_e,yi_e=1000,1000
                     if e<1: 
                         e+=0.5 #Se limita la velocidad de incremento
+                print(time()-t_exp)
                 
 
                 x_e+=int(e) #aumenta el incremento de "exp"
@@ -1272,8 +1290,8 @@ Salidas: si existe el choque en cualquier punto congruente
                         Energia_c=Energia_c+10 if Energia_c+10<=100 else 100
                         energia_sonido.play()
                         
-                if Count==10:
-                    Count-=10
+                if Count==6:
+                    Count-=6
                     Energia_c-=1
                     arduino.write(gen_serial(Energia_c,C_display))
 
@@ -1495,9 +1513,7 @@ def get_gir(): #sacar estados de giroscopio (posx,posy)
 
 def mov_potenciometro_botones(c_i,Lista_bot):
     global vent,i_per,i_back,dft
-    print(vent)
     if vent==5:
-        print(4)
         return
     sleep(.1)
     btn=get_bot()

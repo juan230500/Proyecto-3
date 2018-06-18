@@ -1,5 +1,5 @@
-Dasd,550
-Fdfs,450
-Fsd,400
-Dsfsd,350
-Gfd,325
+Fsdf,225
+Ffdsf,225
+Gfdg,225
+Fsd,200
+Fsdf,200
