@@ -223,6 +223,8 @@ li_per=[('Ba', 0), ('Gibo', 0), ('Cukigi', 0), ('Hu', 0), ('Heva', 0),
 ('Ri', 0), ('Saroyat', 0),('Vulipas', 0), ('Xu', 0), ('Kimuje', 0), 
 ('Qu', 0), ('Seye', 0), ('Surupe', 0),('Xi', 0),('Notlim',0)] #lista predefinida de jugadores
 
+#               ____________________
+#______________/Puente del arduino
 arduino=serial.Serial("COM3",38400) #cargar el puerte de arduino
 
 
@@ -242,8 +244,8 @@ País de Producción: Costa Rica
 Profesor: Milton Villegas Lemus
 Como implementar: Se invoca con F5 desde el Idle del código
 Programa: II Proyecto
-Autores: Juan Pablo Alvarado Villalobos, Sebastián Calderón, Julian Aguilera
-Carné: 2018135360,2018161630,2018135658
+Autores: Juan Pablo Alvarado Villalobos, Sebastián Calderón
+Carné: 2018135360,2018161630
 Lenguaje: Python 3.6
 Versión: 6.1
 Ult.Fecha de mod: 3/6/18
@@ -262,8 +264,8 @@ Country of Production: Costa Rica
 Teacher: Milton Villegas Lemus
 How to implement: It is invoked with F5 from the Idle of the code
 Program: II Proyecto
-Authors: Juan Pablo Alvarado Villalobos, Sebastián Calderón, Julian Aguilera
-Cardé: 2018135360,2018161630,2018135658
+Authors: Juan Pablo Alvarado Villalobos, Sebastián Calderón
+Cardé: 2018135360,2018161630
 Language: Python 3.6
 Version: 6.1
 Last modified date: 3/6/18
@@ -281,7 +283,7 @@ Carrera :Ing. Computadores
 Curso: Intro a la programación
 Como implementar: se invoca con inter()
 Módulo : intercambio de idiomas
-Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+Autores : Juan Pablo Alvarado, Sebastián Calderón
 Lenguaje: Python 3.6
 Version : 1.0
 Ult.Fecha de mod: 3/6/18
@@ -306,7 +308,7 @@ Salidas: ninguna
         
     dic_trad=dic
 
-    #Ajusta los labelsde la pantalla principal
+    #Ajusta los labels de la pantalla principal
     L_vr.config(text=dic[1])
     L_vr1.config(text=dic[22])
     root.title(dic[0])
@@ -409,7 +411,7 @@ Carrera :Ing. Computadores
 Curso: Intro a la programación
 Como implementar: se invoca con reiniciar()
 Módulo : reiniciar puntuaciones
-Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+Autores : Juan Pablo Alvarado, Sebastián Calderón
 Lenguaje: Python 3.6
 Version : 1.0
 Ult.Fecha de mod: 3/6/18
@@ -670,8 +672,20 @@ def VentanaJuego(nombre):
             root_jueg.blit(img,(x,y))
 
 
-        #           _____________________________
-        #__________/Generar el codigo a leer por el arduino
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con gen_serial(energia, aros)
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : el valor de la energia y el contador de aros
+Restricciones: ninguna
+Salidas: código a interpretar para los leds y el display
+******************************************************************"""
         def gen_serial(energia,aros):
             st='leds='
             for i in range(6):
@@ -739,7 +753,7 @@ Carrera :Ing. Computadores
 Curso: Intro a la programación
 Como implementar: se invoca con ev_choque_comp()
 Módulo : reiniciar puntuaciones
-Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+Autores : Juan Pablo Alvarado, Sebastián Calderón
 Lenguaje: Python 3.6
 Version : 1.0
 Ult.Fecha de mod: 3/6/18
@@ -759,7 +773,7 @@ Carrera :Ing. Computadores
 Curso: Intro a la programación
 Como implementar: se invoca con ev_choque_punt()
 Módulo : reiniciar puntuaciones
-Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+Autores : Juan Pablo Alvarado, Sebastián Calderón
 Lenguaje: Python 3.6
 Version : 1.0
 Ult.Fecha de mod: 3/6/18
@@ -997,7 +1011,7 @@ Salidas: si existe el choque en cualquier punto congruente
             Curso: Intro a la programación
             Como implementar: se invoca con gen_enem(Selector)
             Módulo : enemigos
-            Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+            Autores : Juan Pablo Alvarado, Sebastián Calderón
             Lenguaje: Python 3.6
             Version : 1.0
             Ult.Fecha de mod: 4/6/18
@@ -1041,7 +1055,7 @@ Salidas: si existe el choque en cualquier punto congruente
             Curso: Intro a la programación
             Como implementar: se invoca con exp_enem(Enemigo)
             Módulo : enemigos
-            Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+            Autores : Juan Pablo Alvarado, Sebastián Calderón
             Lenguaje: Python 3.6
             Version : 1.0
             Ult.Fecha de mod: 4/6/18
@@ -1076,7 +1090,7 @@ Salidas: si existe el choque en cualquier punto congruente
             Curso: Intro a la programación
             Como implementar: se invoca con exp()
             Módulo : enemigos
-            Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+            Autores : Juan Pablo Alvarado, Sebastián Calderón
             Lenguaje: Python 3.6
             Version : 1.0
             Ult.Fecha de mod: 4/6/18
@@ -1110,7 +1124,7 @@ Salidas: si existe el choque en cualquier punto congruente
             Curso: Intro a la programación
             Como implementar: se invoca con ev_choque_enem(PosJug,Enemigo)
             Módulo : enemigos
-            Autores : Juan Pablo Alvarado, Sebastián Calderón, Julian
+            Autores : Juan Pablo Alvarado, Sebastián Calderón
             Lenguaje: Python 3.6
             Version : 1.0
             Ult.Fecha de mod: 4/6/18
@@ -1431,6 +1445,20 @@ Salidas: si existe el choque en cualquier punto congruente
     Btn_back2.image = home1
     Btn_back2.place(x=200,y=360)
 
+    """
+    ******************************************************************
+    Instituto: Tecnológico de Costa Rica
+    Carrera :Ing. Computadores 
+    Curso: Intro a la programación
+    Como implementar: se invoca con ajustar()
+    Autores : Juan Pablo Alvarado, Sebastián Calderón
+    Lenguaje: Python 3.6
+    Version : 1.0
+    Ult.Fecha de mod: 18/6/18
+    Entradas : ninguna
+    Restricciones: ninguna
+    Salidas: imagen marcada de donde se posiciona el potenciometro
+    ******************************************************************"""
     def ajustar():
         try:
             sleep(.2)
@@ -1467,6 +1495,20 @@ def Jugar(): #función que carga la ventana del juego
     else:
         VentanaJuego(nombre) #devuelve la ventana junto con el nombre introducido
 
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con ajust_bot(c_i)
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : indice del icono
+Restricciones: ninguna
+Salidas: imagen marcada de donde se encuentra el potenciometro
+******************************************************************"""
 #               __________________
 #______________/Selector de iconos
 def ajust_bot(c_i):
@@ -1478,6 +1520,20 @@ def ajust_bot(c_i):
            sel="black"
        Lista_bot[i].configure(bg=sel) 
 
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con get_pot()
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : ninguna
+Restricciones: ninguna
+Salidas: valor del potenciometro
+******************************************************************"""
 #               ____________________________
 #______________/Movimiento del potenciometro y botones
 def get_pot(): #sacar valor de potenciometro
@@ -1489,12 +1545,41 @@ def get_pot(): #sacar valor de potenciometro
             c=int(b[0])-48
         return c
 
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con get_bot()
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : ninguna
+Restricciones: ninguna
+Salidas: valor de los botones en el control
+******************************************************************"""
 def get_bot(): #sacar botones (btn1,btn2)
         a=arduino.readline()
         b2=a[12]-48
         b1=a[5]-48
         return b1,b2
 
+
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con get_gir()
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : ninguna
+Restricciones: ninguna
+Salidas: valor del eje x y el eje Y segun el giroscopio
+******************************************************************"""
 def get_gir(): #sacar estados de giroscopio (posx,posy)
     a=arduino.readline()
     a=a.decode()
@@ -1511,6 +1596,21 @@ def get_gir(): #sacar estados de giroscopio (posx,posy)
     return e,d
 
 
+
+"""
+******************************************************************
+Instituto: Tecnológico de Costa Rica
+Carrera :Ing. Computadores 
+Curso: Intro a la programación
+Como implementar: se invoca con mov_potenciometro_botones(c_i, Lista_bot)
+Autores : Juan Pablo Alvarado, Sebastián Calderón
+Lenguaje: Python 3.6
+Version : 1.0
+Ult.Fecha de mod: 18/6/18
+Entradas : c_i (índice del boton) y Lista_bot(lista de los botones por pantalla)
+Restricciones: ninguna
+Salidas: la accion de los botones presionados segun la pantalla
+******************************************************************"""
 def mov_potenciometro_botones(c_i,Lista_bot):
     global vent,i_per,i_back,dft
     if vent==5:
